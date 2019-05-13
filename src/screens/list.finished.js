@@ -3,32 +3,30 @@ import {jsx} from '@emotion/core'
 
 import {Link} from '@reach/router'
 import {BookListUL} from '../components/lib'
-// 🐨 get useListItemState from '../context/list-item-context'
+import {useListItemState} from '../context/list-item-context'
 import BookRow from '../components/book-row'
 
 function ReadingListScreen() {
-  // 🐨 get the listItems from useListItemState
-  const listItems = []
-  const readListItems = listItems.filter(li => li.finishDate)
+  const listItems = useListItemState()
+  const unreadListItems = listItems.filter(li => !li.finishDate)
 
   if (!listItems.length) {
     return (
       <div css={{marginTop: '1em', fontSize: '1.2em'}}>
         <p>
-          Hey there! This is where books will go when you've finished reading
-          them. Get started by heading over to{' '}
-          <Link to="/discover">the Discover page</Link> to add books to your
-          list.
+          Hey there! Welcome to your bookshelf reading list. Get started by
+          heading over to <Link to="/discover">the Discover page</Link> to add
+          books to your list.
         </p>
       </div>
     )
   }
-  if (!readListItems.length) {
+  if (!unreadListItems.length) {
     return (
       <div css={{marginTop: '1em', fontSize: '1.2em'}}>
         <p>
-          Looks like you've got some reading to do! Check them out in your{' '}
-          <Link to="/list">reading list</Link> or{' '}
+          Looks like you've finished all your books! Check them out in your{' '}
+          <Link to="/finished">finished books</Link> or{' '}
           <Link to="/discover">discover more</Link>.
         </p>
       </div>
@@ -38,7 +36,7 @@ function ReadingListScreen() {
   return (
     <div css={{marginTop: '1em'}}>
       <BookListUL>
-        {readListItems.map(listItem => (
+        {unreadListItems.map(listItem => (
           <li key={listItem.id}>
             <BookRow book={listItem.book} />
           </li>

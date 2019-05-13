@@ -3,12 +3,11 @@ import {jsx} from '@emotion/core'
 
 import {Link} from '@reach/router'
 import {BookListUL} from '../components/lib'
-// 🐨 get useListItemState from '../context/list-item-context'
+import {useListItemState} from '../context/list-item-context'
 import BookRow from '../components/book-row'
 
 function ReadingListScreen() {
-  // 🐨 get the listItems from useListItemState
-  const listItems = []
+  const listItems = useListItemState()
   const readListItems = listItems.filter(li => li.finishDate)
 
   if (!listItems.length) {

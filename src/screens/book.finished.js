@@ -9,8 +9,11 @@ import Tooltip from '@reach/tooltip'
 import * as mq from '../styles/media-queries'
 import * as colors from '../styles/colors'
 import {Spinner} from '../components/lib'
-// 🐨 you'll need useListItemDispatch, useSingleListItemState, and
-// updateListItem from '../context/list-item-context'
+import {
+  useListItemDispatch,
+  useSingleListItemState,
+  updateListItem,
+} from '../context/list-item-context'
 import Rating from '../components/rating'
 import * as bookClient from '../utils/books-client'
 import StatusButtons from '../components/status-buttons'
@@ -29,8 +32,7 @@ function BookScreen({bookId}) {
     promiseFn: getBook,
     bookId,
   })
-  // 🐨 get the list item from useSingleListItemState
-  const listItem = null
+  const listItem = useSingleListItemState({bookId})
 
   if (isPending) {
     return (
@@ -134,20 +136,12 @@ function BookScreen({bookId}) {
   )
 }
 
-// 🐨 make this function call `updateListItem` with the proper arguments.
-const updateNotes = () => {}
-// 💰 this one's a bit tricky because the first argument is actually an array
-// of the arguments that `run` is called with below, so I'm going to give it to
-// you for free!! 🤑
-// function updateNotes([notes], {dispatch, listItem}) {
-//   return updateListItem(dispatch, listItem.id, {notes})
-// }
+function updateNotes([notes], {dispatch, listItem}) {
+  return updateListItem(dispatch, listItem.id, {notes})
+}
 
 function NotesTextarea({listItem}) {
-  // 🐨 get dispatch from useListItemDispatch
-  // 🦉 notice that it's passed to `useAsync` which will call `updateNotes`
-  // with the dispatch and listItem which `run` is called with the `index`.
-  const dispatch = () => {}
+  const dispatch = useListItemDispatch()
   const {isPending, isRejected, error, run} = useAsync({
     deferFn: updateNotes,
     dispatch,
